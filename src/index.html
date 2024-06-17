@@ -4,5 +4,16 @@
 		<meta charset="UTF-8" />
 		<title>Odin Weather App</title>
 	</head>
-	<body></body>
+	<body>
+		<form id="locationForm">
+			<label for="zipcode">Enter your zip code below:</label>
+			<br />
+			<br />
+			<input id="zipcode" type="text" name="zipcode" required />
+		</form>
+		<div id="results" hidden>
+			<h2 id="location"></h2>
+			<p>Current temperature: <span id="currentTemp"></span></p>
+		</div>
+	</body>
 </html>
