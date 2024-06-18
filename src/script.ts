@@ -9,6 +9,8 @@ let lastForecastResponse: WeatherApiForecastResponse;
 
 let useMetric = false;
 
+const RESULTS_CARD = document.getElementById('resultsCard') as HTMLDivElement;
+const RESULTS_LOADING = document.getElementById('resultsLoading') as HTMLDivElement;
 const RESULTS = document.getElementById('results') as HTMLDivElement;
 const LOCATION = document.getElementById('location') as HTMLFormElement;
 const CURRENT_TEMP = document.getElementById('currentTemp') as HTMLSpanElement;
@@ -18,6 +20,9 @@ const FEELS_LIKE = document.getElementById('feelsLike') as HTMLSpanElement;
 
 LOCATION_FORM.addEventListener('submit', (event) => {
 	event.preventDefault();
+	RESULTS_CARD.hidden = false;
+	RESULTS_LOADING.hidden = false;
+	RESULTS.hidden = true;
 	const formData = new FormData(event.target as HTMLFormElement);
 	getForecast(formData.get('zipcode').toString());
 });
@@ -36,6 +41,7 @@ function getForecast(zipCode: string) {
 }
 
 function updateResultsPane(forecastData: WeatherApiForecastResponse) {
+	RESULTS_LOADING.hidden = true;
 	RESULTS.hidden = false;
 	LOCATION.innerText = forecastData.location?.name + (!!forecastData.location?.region ? `, ${forecastData.location.region}` : '');
 	CONDITION_ICON.src = forecastData.current.condition.icon;
