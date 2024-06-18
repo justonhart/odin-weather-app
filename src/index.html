@@ -5,15 +5,23 @@
 		<title>Odin Weather App</title>
 	</head>
 	<body>
-		<form id="locationForm">
+		<form id="locationForm" class="card">
 			<label for="zipcode">Enter your zip code below:</label>
 			<br />
 			<br />
-			<input id="zipcode" type="text" name="zipcode" required />
+			<div>
+				<input id="zipcode" type="text" name="zipcode" required />
+				<input type="submit" value="Go">
+			</div>
 		</form>
-		<div id="results" hidden>
-			<h2 id="location"></h2>
-			<p>Current temperature: <span id="currentTemp"></span></p>
+		<div id="results" class="card" hidden>
+			<h2 id="location">Location</h2>
+			<div id="conditions" class="vertical-center">
+				<img id="conditionIcon">&nbsp;
+				<span id="conditionText"></span>&nbsp;-&nbsp;
+				<span id="currentTemp"></span>
+			</div>
+			<span id="feelsLike"></span>
 		</div>
 	</body>
 </html>
