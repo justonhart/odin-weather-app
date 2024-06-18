@@ -1,4 +1,5 @@
 import './style.css';
+import DomManipulator from './DomManipulator';
 import WeatherApiForecastResponse from './types/WeatherApiForecastResponse';
 
 //obviously, storing keys in source control is bad practice, but the prompt says to just do it
@@ -10,46 +11,25 @@ let lastForecastResponse: WeatherApiForecastResponse;
 let useMetric = false;
 
 const RESULTS_CARD = document.getElementById('resultsCard') as HTMLDivElement;
-const RESULTS_LOADING = document.getElementById('resultsLoading') as HTMLDivElement;
-const RESULTS = document.getElementById('results') as HTMLDivElement;
-const LOCATION = document.getElementById('location') as HTMLFormElement;
-const CURRENT_TEMP = document.getElementById('currentTemp') as HTMLSpanElement;
-const CONDITION_ICON = document.getElementById('conditionIcon') as HTMLImageElement;
-const CONDITION_TEXT = document.getElementById('conditionText') as HTMLSpanElement;
-const FEELS_LIKE = document.getElementById('feelsLike') as HTMLSpanElement;
+const dm = new DomManipulator(RESULTS_CARD, useMetric);
 
-LOCATION_FORM.addEventListener('submit', (event) => {
+LOCATION_FORM.addEventListener('submit', async (event) => {
 	event.preventDefault();
-	RESULTS_CARD.hidden = false;
-	RESULTS_LOADING.hidden = false;
-	RESULTS.hidden = true;
+	dm.setLoading();
 	const formData = new FormData(event.target as HTMLFormElement);
-	getForecast(formData.get('zipcode').toString());
+	
+	lastForecastResponse = await getForecast(formData.get('zipcode').toString());
+	dm.setResults(lastForecastResponse);
 });
 
-function getForecast(zipCode: string) {
+async function getForecast(zipCode: string): Promise<WeatherApiForecastResponse> {
 	const URL = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${zipCode}`;
-	fetch(URL)
+	return fetch(URL)
 		.then((result) => {
 			return result.json();
 		})
 		.then((response: WeatherApiForecastResponse) => {
-			lastForecastResponse = response;
-			console.log(lastForecastResponse);
-			updateResultsPane(lastForecastResponse);
+			return response;
 		});
 }
 
-function updateResultsPane(forecastData: WeatherApiForecastResponse) {
-	RESULTS_LOADING.hidden = true;
-	RESULTS.hidden = false;
-	LOCATION.innerText = forecastData.location?.name + (!!forecastData.location?.region ? `, ${forecastData.location.region}` : '');
-	CONDITION_ICON.src = forecastData.current.condition.icon;
-	CONDITION_TEXT.innerText = forecastData.current.condition.text;
-	CURRENT_TEMP.innerText = useMetric
-		? `${forecastData.current.temp_c.toString()} °C`
-		: `${forecastData.current.temp_f.toString()} °F`;
-	FEELS_LIKE.innerText = 'Feels like ' + (useMetric
-		? `${forecastData.current.feelslike_c.toString()} °C`
-		: `${forecastData.current.feelslike_f.toString()} °F`);
-}
