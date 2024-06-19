@@ -19,6 +19,9 @@ export default class DomManipulator {
 		this.resultsElement.classList.remove('hidden');
 		this.resultsElement.innerHTML = '';
 		this.resultsElement.innerText = 'Loading results...';
+
+		this.hourlyForecastElement.innerHTML = '';
+		this.hourlyForecastElement.classList.add('hidden');
 	}
 
 	public setResults(result: WeatherApiForecastResponse): void {
