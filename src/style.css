@@ -35,11 +35,11 @@ body {
 	box-shadow: 0px 3px 8px -3px black;
 }
 
-form input[type='text'] {
+#zipcode {
 	font-size: 125%;
 }
 
-form input[type='submit'] {
+#locationForm input[type='submit'] {
 	background: #9f9cf4;
 	border: none;
 	border-radius: 4px;
